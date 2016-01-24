@@ -33,11 +33,16 @@ object Example extends App with StrictLogging {
 
   val routes =
     path("") {
-      redirect("/app/campaigns", Found)
+      redirect("/app/campaigns", SeeOther)
     } ~
       pathPrefix("app") {
         path("login") {
-          getFromFile("public/index.html")
+          myOptionalSession {
+            case Some(session) =>
+              redirect("/", SeeOther)
+            case None =>
+              getFromFile("public/index.html")
+          }
         } ~
           get {
             myOptionalSession {
@@ -55,7 +60,7 @@ object Example extends App with StrictLogging {
               logger.info(s"Logging in $body")
 
               mySetSession(ExampleSession(body)) {
-                setNewCsrfToken(checkHeader) { ctx => ctx.complete("ok") }
+                ctx => ctx.complete("ok")
               }
             }
           }

@@ -20,7 +20,7 @@ var Body = React.createClass({
       type: 'POST',
       data: login,
       success: function() {
-        location.assign('/');
+        location.reload(true);
       }
     });
   },
