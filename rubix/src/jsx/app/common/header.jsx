@@ -12,6 +12,15 @@ var Brand = React.createClass({
 
 var Navigation = React.createClass({
   mixins: [ReactRouter.State, ReactRouter.Navigation],
+  logout: function () {
+    $.ajax({
+      url: '/api/do_logout',
+      type: 'POST',
+      success: function () {
+        location.reload(true);
+      }
+    });
+  },
   render: function() {
     var props = React.mergeProps({
       className: 'pull-right'
@@ -20,7 +29,7 @@ var Navigation = React.createClass({
     return (
       <NavContent {...props}>
         <Nav>
-          <NavItem className='logout bg-green' href="#">      
+          <NavItem className='logout bg-green' href="javascript:void(0)" onClick={this.logout}>
               <Icon bundle='fontello'  glyph='off-1' />
           </NavItem>
         </Nav>

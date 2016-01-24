@@ -10,9 +10,19 @@ var Body = React.createClass({
     this.transitionTo('/app/billing');
   },
   handleSubmit:function(e){
-      e.preventDefault();
-      e.stopPropagation();
-      console.log("redirecting..");
+    e.preventDefault();
+    e.stopPropagation();
+    console.log("Submitting authorization form");
+    var login = this.refs.emailAddress.getDOMNode().value;
+    if (!login) return;
+    $.ajax({
+      url: '/api/do_login',
+      type: 'POST',
+      data: login,
+      success: function() {
+        location.assign('/');
+      }
+    });
   },
   componentDidMount: function() {
     $('html').addClass('authentication');
@@ -61,6 +71,7 @@ var Body = React.createClass({
                                   <Input autoFocus
                                          type='text'
                                          id='emailaddress'
+                                         ref='emailAddress'
                                          className='border-focus-blue'
                                          placeholder='username'
                                          />
@@ -73,6 +84,7 @@ var Body = React.createClass({
                                   </InputGroupAddon>
                                   <Input type='password'
                                          id='password'
+                                         ref='password'
                                          className='border-focus-blue'
                                          placeholder='password'
                                          />

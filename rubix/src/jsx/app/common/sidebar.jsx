@@ -113,6 +113,19 @@ var DummySidebar = React.createClass({
 });
 
 var SidebarSection = React.createClass({
+  getInitialState: function () {
+    return { login: '' };
+  },
+  componentWillMount: function () {
+    var self = this;
+    $.ajax({
+      url: '/api/current_login',
+      type: 'GET',
+      success: function (data) {
+        self.setState({ login: data });
+      }
+    });
+  },
   render: function() {
     return (
       <div id='sidebar' {...this.props}>
@@ -128,7 +141,7 @@ var SidebarSection = React.createClass({
                   fontSize: 16,
                   lineHeight: 1,
                   position: 'relative'
-                }}>George Beridze</div>
+                }}>{this.state.login}</div>
                 <div>
                   <Progress id='demo-progress' value={30} min={0} max={100} color='#ffffff'/>
                   <a href='#'><Icon id='demo-icon' bundle='fontello' glyph='lock-5'/></a>

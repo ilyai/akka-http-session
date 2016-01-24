@@ -48,43 +48,41 @@ object Example extends App with StrictLogging {
             }
           }
       } ~
-      randomTokenCsrfProtection(checkHeader) {
-        pathPrefix("api") {
-          path("do_login") {
-            post {
-              entity(as[String]) { body =>
-                logger.info(s"Logging in $body")
+      pathPrefix("api") {
+        path("do_login") {
+          post {
+            entity(as[String]) { body =>
+              logger.info(s"Logging in $body")
 
-                mySetSession(ExampleSession(body)) {
-                  setNewCsrfToken(checkHeader) { ctx => ctx.complete("ok") }
+              mySetSession(ExampleSession(body)) {
+                setNewCsrfToken(checkHeader) { ctx => ctx.complete("ok") }
+              }
+            }
+          }
+        } ~
+          // This should be protected and accessible only when logged in
+          path("do_logout") {
+            post {
+              myRequiredSession { session =>
+                myInvalidateSession { ctx =>
+                  logger.info(s"Logging out $session")
+                  ctx.complete("ok")
                 }
               }
             }
           } ~
-            // This should be protected and accessible only when logged in
-            path("do_logout") {
-              post {
-                myRequiredSession { session =>
-                  myInvalidateSession { ctx =>
-                    logger.info(s"Logging out $session")
-                    ctx.complete("ok")
-                  }
-                }
-              }
-            } ~
-            // This should be protected and accessible only when logged in
-            path("current_login") {
-              get {
-                myRequiredSession { session => ctx =>
-                  logger.info("Current session: " + session)
-                  ctx.complete(session.username)
-                }
+          // This should be protected and accessible only when logged in
+          path("current_login") {
+            get {
+              myRequiredSession { session => ctx =>
+                logger.info("Current session: " + session)
+                ctx.complete(session.username)
               }
             }
-        } ~
-          get {
-            getFromDirectory("public/")
           }
+      } ~
+      get {
+        getFromDirectory("public/")
       }
 
   val bindingFuture = Http().bindAndHandle(routes, "localhost", 8080)
