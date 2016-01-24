@@ -28,12 +28,26 @@ object Example extends App with StrictLogging {
 
   def mySetSession(v: ExampleSession) = setSession(refreshable, usingCookies, v)
   val myRequiredSession = requiredSession(refreshable, usingCookies)
+  val myOptionalSession = optionalSession(refreshable, usingCookies)
   val myInvalidateSession = invalidateSession(refreshable, usingCookies)
 
   val routes =
     path("") {
-      redirect("/site/index.html", Found)
+      redirect("/app/campaigns", Found)
     } ~
+      pathPrefix("app") {
+        path("login") {
+          getFromFile("public/index.html")
+        } ~
+          get {
+            myOptionalSession {
+              case Some(session) =>
+                getFromFile("public/index.html")
+              case None =>
+                redirect("/app/login", SeeOther)
+            }
+          }
+      } ~
       randomTokenCsrfProtection(checkHeader) {
         pathPrefix("api") {
           path("do_login") {
@@ -68,8 +82,8 @@ object Example extends App with StrictLogging {
               }
             }
         } ~
-          pathPrefix("site") {
-            getFromResourceDirectory("")
+          get {
+            getFromDirectory("public/")
           }
       }
 

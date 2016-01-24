@@ -17,3 +17,17 @@ project/plugins/project/
 .worksheet
 
 .idea*
+.iml
+
+/rubix/node_modules
+.DS_Store
+
+project/target
+public/rubix/node_modules
+public/rubix/public
+public/css/app
+public/css/demo
+public/css/fonts
+public/js/app
+public/js/demo
+public/js/minified
