@@ -4,35 +4,12 @@ var Footer = require('../../common/footer.jsx');
 
 var Body = React.createClass({
   componentDidMount: function() {
-    $('#campagn-table').addClass('nowrap').dataTable({
-      responsive: true,
-      "order": [
-        [3, "desc"]
-      ],
-      columnDefs: [
-        {
-          targets: [
-            -1, -5
-          ],
-          className: 'dt-body-right'
-        }
-      ]
-    });
 
-    //campagn table, deleting
-    var table = $('#campagn-table').DataTable();
-    $('#campagn-table tbody').on('click', 'tr', function() {
-      if ($(this).hasClass('selected')) {
-        $(this).removeClass('selected');
-      } else {
-        table.$('tr.selected').removeClass('selected');
-        $(this).addClass('selected');
-      }
-    });
 
-    $('#delete-button').click(function() {
-      table.row('.selected').remove().draw(false);
-    });
+    $('.tablesaw').table();
+
+
+
 
 
 
@@ -49,7 +26,7 @@ var Body = React.createClass({
       <Modal>
         <ModalHeader>
           <Button onClick={ModalManager.remove} onTouchEnd={ModalManager.remove} close/>
-          <h4 className='modal-title'>Packages</h4>
+          <h4 className='modal-title'>sss</h4>
         </ModalHeader>
         <ModalBody>
           <p>Campagn style
@@ -112,10 +89,11 @@ var Body = React.createClass({
                     <Grid>
                       <Row>
                         <Col xs={12}>
-                          <Table id='campagn-table' className='display' cellSpacing='0' width='100%'>
+                          <Table id='campagn-table' className='tablesaw' cellSpacing='0' width='100%'>
                             <thead>
                               <tr>
                                 <th>ID</th>
+                                <th>Customer</th>
                                 <th>Campagn Name</th>
                                 <th>End Date</th>
                                 <th>Number of times played</th>
@@ -128,7 +106,8 @@ var Body = React.createClass({
                             <tbody>
                               <tr>
                                 <td>4</td>
-                                <td>Xmas</td>
+                                <td>Coca-cola</td>
+                                <td>Xmasss</td>
                                 <td>27/10/2015</td>
                                 <td>4</td>
                                 <td>$57</td>
@@ -146,6 +125,7 @@ var Body = React.createClass({
                               </tr>
                               <tr>
                                 <td>2</td>
+                                <td>Clean House</td>
                                 <td>Summer</td>
                                 <td>2/10/2015</td>
                                 <td>1</td>
@@ -164,6 +144,7 @@ var Body = React.createClass({
                               </tr>
                               <tr>
                                 <td>3</td>
+                                <td>Toyota</td>
                                 <td>Independence day</td>
                                 <td>27/8/2015</td>
                                 <td>15</td>
@@ -182,6 +163,7 @@ var Body = React.createClass({
                               </tr>
                               <tr>
                                 <td>4</td>
+                                <td>Rustaveli teather</td>
                                 <td>Halloween</td>
                                 <td>5/4/2015</td>
                                 <td>7</td>
@@ -197,6 +179,7 @@ var Body = React.createClass({
                               </tr>
                               <tr>
                                 <td>5</td>
+                                <td>finca.ge</td>
                                 <td>The Christmas Feast and Santa Claus</td>
                                 <td>27/10/2015</td>
                                 <td>4</td>
@@ -212,6 +195,7 @@ var Body = React.createClass({
                               </tr>
                               <tr>
                                 <td>1</td>
+                                <td>unilever</td>
                                 <td>public holidays</td>
                                 <td>27/10/2015</td>
                                 <td>4</td>
@@ -227,6 +211,7 @@ var Body = React.createClass({
                               </tr>
                               <tr>
                                 <td>1</td>
+                                <td>marjanishvili</td>
                                 <td>Mother’s Day</td>
                                 <td>27/10/2015</td>
                                 <td>4</td>
@@ -242,6 +227,7 @@ var Body = React.createClass({
                               </tr>
                               <tr>
                                 <td>1</td>
+                                <td>basalt fibers</td>
                                 <td>spring</td>
                                 <td>27/10/2015</td>
                                 <td>4</td>
@@ -257,6 +243,7 @@ var Body = React.createClass({
                               </tr>
                               <tr>
                                 <td>1</td>
+                                <td>Pepsi</td>
                                 <td>Winter</td>
                                 <td>27/10/2015</td>
                                 <td>4</td>
@@ -270,11 +257,6 @@ var Body = React.createClass({
                               </tr>
                             </tbody>
                           </Table>
-                          <br/>
-                          <Button sm style={{
-                            margin: 15,
-                            borderRadius: 3
-                          }} id="delete-button" bsStyle='danger'>delete campagn</Button>
                         </Col>
                       </Row>
                     </Grid>
