@@ -26,32 +26,19 @@ object Example extends App with StrictLogging {
     def log(msg: String) = logger.info(msg)
   }
 
-  def mySetSession(v: ExampleSession) = setSession(refreshable, usingCookies, v)
-  val myRequiredSession = requiredSession(refreshable, usingCookies)
-  val myOptionalSession = optionalSession(refreshable, usingCookies)
-  val myInvalidateSession = invalidateSession(refreshable, usingCookies)
+  def mySetSession(v: ExampleSession) = setSession(refreshable, usingHeaders, v)
+  val myRequiredSession = requiredSession(refreshable, usingHeaders)
+  val myOptionalSession = optionalSession(refreshable, usingHeaders)
+  val myInvalidateSession = invalidateSession(refreshable, usingHeaders)
 
   val routes =
     path("") {
       redirect("/app/campaigns", SeeOther)
     } ~
       pathPrefix("app") {
-        path("login") {
-          myOptionalSession {
-            case Some(session) =>
-              redirect("/", SeeOther)
-            case None =>
-              getFromFile("public/index.html")
-          }
-        } ~
-          get {
-            myOptionalSession {
-              case Some(session) =>
-                getFromFile("public/index.html")
-              case None =>
-                redirect("/app/login", SeeOther)
-            }
-          }
+        get {
+          getFromFile("public/index.html")
+        }
       } ~
       pathPrefix("api") {
         path("do_login") {

@@ -13,11 +13,14 @@ var Brand = React.createClass({
 var Navigation = React.createClass({
   mixins: [ReactRouter.State, ReactRouter.Navigation],
   logout: function () {
+    var self = this;
     $.ajax({
       url: '/api/do_logout',
       type: 'POST',
       success: function () {
-        location.reload(true);
+        localStorage.removeItem('Authorization');
+        localStorage.removeItem('Refresh-Token');
+        self.transitionTo('/app/login');
       }
     });
   },

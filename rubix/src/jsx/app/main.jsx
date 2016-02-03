@@ -17,6 +17,31 @@ Pace.once('hide', function() {
   $('#pace-loader').removeClass('pace-big').addClass('pace-small');
 });
 
+(function () {
+  var _ajax = $.ajax;
+  $.ajax = function (url, options) {
+    if ($.isPlainObject(url)) {
+      options = url
+    } else {
+      options.url = url;
+    }
+    var _beforeSend = options.beforeSend;
+    options.beforeSend = function (xhr, settings) {
+      if (_beforeSend)
+        _beforeSend.apply(options, arguments);
+      if (localStorage.hasOwnProperty('Authorization')) {
+        console.debug("Setting Authorization header...");
+        xhr.setRequestHeader('Authorization', localStorage.getItem('Authorization'));
+      }
+      if (localStorage.hasOwnProperty('Refresh-Token')) {
+        console.debug("Setting Refresh-Token header...");
+        xhr.setRequestHeader('Refresh-Token', localStorage.getItem('Refresh-Token'));
+      }
+    };
+    return _ajax.apply($, arguments);
+  };
+})();
+
 var InitializeRouter = function(View) {
   // cleanup
   if(window.Rubix) window.Rubix.Cleanup();
@@ -25,6 +50,14 @@ var InitializeRouter = function(View) {
     window.ga('send', 'pageview', {
      'page': window.location.pathname + window.location.search  + window.location.hash
     });
+  }
+
+  if (localStorage.hasOwnProperty('Authorization')) {
+    if (location.pathname === '/app/login') {
+      location.assign('/');
+    }
+  } else if (location.pathname !== '/app/login') {
+    location.assign('/app/login');
   }
 
   React.render(<View />, document.getElementById('app-container'), function() {

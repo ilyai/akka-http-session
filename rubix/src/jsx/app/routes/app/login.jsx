@@ -10,6 +10,7 @@ var Body = React.createClass({
     this.transitionTo('/app/billing');
   },
   handleSubmit:function(e){
+    var self = this;
     e.preventDefault();
     e.stopPropagation();
     console.log("Submitting authorization form");
@@ -19,8 +20,13 @@ var Body = React.createClass({
       url: '/api/do_login',
       type: 'POST',
       data: login,
-      success: function() {
-        location.reload(true);
+      success: function(data, status, xhr) {
+        console.log("Login successful");
+        console.dir(arguments);
+        //location.reload(true);
+        localStorage.setItem('Authorization', xhr.getResponseHeader('Set-Authorization'));
+        localStorage.setItem('Refresh-Token', xhr.getResponseHeader('Set-Refresh-Token'));
+        self.replaceWith('/app/campaigns');
       }
     });
   },
